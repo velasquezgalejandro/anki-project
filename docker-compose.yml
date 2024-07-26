@@ -1,0 +1,39 @@
+version: '4.12'
+
+services:
+  database:
+    image: postgres:latest
+    restart: always
+    ports:
+      - 8080:8080
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DATABASE=database
+    # volume:
+    #   - volume:/path/to/mount
+
+  backend:
+    # image: backend:latest
+    build: ./backend
+    ports:
+      - 8000:8000
+    depends_on:
+      - database
+    networks:
+      - backend_network
+
+  frontend:
+    # image: fronted:latest
+    build: ./fronted
+    ports:
+      - 3000:3000
+    depends_on:
+      - backend
+    networks:
+      - frontend_network
+
+networks:
+  frontend_network:
+    driver: bridge
+  backend_network:
+    driver: bridge
