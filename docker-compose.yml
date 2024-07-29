@@ -1,5 +1,8 @@
 version: '4.33'
 
+volumes:
+  postgres_data:
+
 services:
   database:
     image: postgres:latest
@@ -10,20 +13,27 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=user
       - POSTGRES_DATABASE=database
+      - POSTGRES_DB=database
+    networks:
+      - backend_network
     volumes:
-      - /var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
 
   backend:
     build: ./backend
     command: ['python', 'manage.py', 'runserver', '0.0.0.0:8000']
     ports:
       - 8000:8000
-    # depends_on:
-    #   - database
+    depends_on:
+      - database
     networks:
       - backend_network
     environment:
-      NODE_ENV: development
+      - DJANGO_DB_HOST=database
+      - DJANGO_DB_PORT=5432
+      - DJANGO_DB_NAME=database
+      - DJANGO_DB_USER=user
+      - DJANGO_DB_PASSWORD=password
 
   frontend:
     build: ./frontend
