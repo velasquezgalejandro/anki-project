@@ -1,13 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import Box from '@mui/material/Box';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <Box sx={{ px: 0.5, py: 0.2 }}>
+      <App />
+    </Box>
   </React.StrictMode>
 );
 
