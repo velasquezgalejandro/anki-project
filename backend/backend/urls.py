@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from quickstart.views import DecksListCreateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('decks/', DecksListCreateView.as_view(), name='deck-list-create')
 ]
