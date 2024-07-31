@@ -2,6 +2,7 @@ version: '4.33'
 
 volumes:
   postgres_data:
+  frontend:
 
 services:
   database:
@@ -43,6 +44,8 @@ services:
       - frontend_network
     environment:
       NODE_ENV: development
+    volumes:
+      - ./frontend:/usr/src/app
 
 networks:
   frontend_network:
