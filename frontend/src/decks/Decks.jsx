@@ -13,7 +13,7 @@ import axios from 'axios';
 //   });
 
 const Decks = () => {
-  return <Stack sx={{ width: 1, height: 1 }}>test test test</Stack>;
+  return <Stack sx={{ width: 1, height: 1 }}>test</Stack>;
 };
 
 export default Decks;
