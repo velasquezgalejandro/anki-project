@@ -34,6 +34,8 @@ services:
       - DJANGO_DB_NAME=database
       - DJANGO_DB_USER=user
       - DJANGO_DB_PASSWORD=password
+    volumes:
+      - ./backend:/usr/src/app
 
   frontend:
     build: ./frontend
