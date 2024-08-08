@@ -16,12 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from decks.views import DecksListCreateView
+from decks.views import DecksListCreateView, CardsListCreateView
 from categories.views import CategoriesListCreateView, SubcategoriesListCreateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('decks/', DecksListCreateView.as_view(), name='deck-list-create'),
+    path('cards/', CardsListCreateView.as_view(), name='card-list-create'),
     path('categories/', CategoriesListCreateView.as_view(), name='categories-list-create'),
     path('subcategories/', SubcategoriesListCreateView.as_view(), name='subcategories-list-create')
 ]
