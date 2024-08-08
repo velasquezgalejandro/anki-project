@@ -6,4 +6,4 @@ from .models import Decks
 class DecksAdmin(admin.ModelAdmin):
     list_display = ('id', 'title')
     search_fields = ('title', 'category', 'subcategory', 'laguanje')
-    ordering = ('id')
+    ordering = ('id', )

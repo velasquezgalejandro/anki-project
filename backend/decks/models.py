@@ -10,6 +10,7 @@ class Decks(models.Model):
     subcategory = models.CharField(max_length=200)
     comand = models.CharField(max_length=200)
     laguanje = models.CharField(max_length=200)
+    test = models.CharField(max_length=200)
 
     def __str__(self):
         return self.title
