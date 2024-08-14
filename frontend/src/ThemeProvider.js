@@ -8,9 +8,6 @@ const theme = createTheme({
     layout: {
       main: '#1a237e',
     },
-    primary: {
-      main: '#ff0000',
-    },
     text: {
       main: '#000000',
       white: '#ffffff',
@@ -18,9 +15,11 @@ const theme = createTheme({
     },
     buttons: {
       primary: '#3d6cb4',
-      secondary: '#1a237e',
-      hover: '#767bb2',
-      selectedHover: '#151c65',
+      secondary: '#0D47A1',
+      primaryHover: '#767bb2',
+      secondaryHover: '#003366',
+      selected: '#151c65',
+      selectedHover: '#050719',
     },
   },
 });
