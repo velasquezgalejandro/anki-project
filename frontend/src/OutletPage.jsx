@@ -5,7 +5,7 @@ import { Footer, Header } from './layouts';
 
 const OutletPage = () => {
   return (
-    <Stack rowGap={2}>
+    <Stack>
       <Header />
       <Outlet />
       <Footer />

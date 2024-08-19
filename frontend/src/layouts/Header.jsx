@@ -24,7 +24,7 @@ const Header = () => {
     setAnchorEl(null);
   };
 
-  const renderNavigate = (link) => {
+  const renderNavigate = (link) => () => {
     navigate(link);
   };
 
@@ -36,13 +36,25 @@ const Header = () => {
       }}
     >
       <Toolbar>
-        <Typography
-          variant="h6"
-          component="div"
-          sx={{ flexGrow: 1, color: 'text.white' }}
+        <Box
+          onClick={() => {
+            navigate('/');
+          }}
+          sx={{
+            flexGrow: 1,
+            '&:hover': {
+              cursor: 'pointer',
+            },
+          }}
         >
-          Nombre
-        </Typography>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1, color: 'text.white' }}
+          >
+            Nombre
+          </Typography>
+        </Box>
         <Stack direction="row" columnGap={2} sx={{ width: 0.5 }}>
           <StyledButton
             label={'Crear Decks'}
