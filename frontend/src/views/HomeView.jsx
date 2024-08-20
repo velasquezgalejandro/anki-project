@@ -6,6 +6,12 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { StyledButton } from '../utils';
 
+const cssButtons = {
+  bgcolor: 'buttons.secondary',
+  color: 'text.white',
+  maxWidth: 200,
+};
+
 const HomeView = () => {
   const navigate = useNavigate();
   const renderNavigate = (link) => () => {
@@ -13,7 +19,7 @@ const HomeView = () => {
   };
 
   return (
-    <Stack>
+    <Stack sx={{ mb: 2 }}>
       <Box>
         <Grid
           container
@@ -46,24 +52,22 @@ const HomeView = () => {
           <Grid xs={6}>usos</Grid>
         </Grid>
       </Stack>
-      <Stack alignItems="center" sx={{width:1}} >
+      <Stack alignItems="center" rowGap={1} sx={{ width: 1 }}>
         <Typography>Accesos</Typography>
-        <Stack direction="row">
+        <Stack
+          direction="row"
+          justifyContent={'space-around'}
+          sx={{ width: 1 }}
+        >
           <StyledButton
             label={'Descargar Decks'}
             action={renderNavigate('/create-decks')}
-            styles={{
-              bgcolor: 'buttons.secondary',
-              color: 'text.white',
-            }}
+            styles={cssButtons}
           />
           <StyledButton
             label={'Crear Decks'}
             action={renderNavigate('/create-decks')}
-            styles={{
-              bgcolor: 'buttons.secondary',
-              color: 'text.white',
-            }}
+            styles={cssButtons}
           />
         </Stack>
       </Stack>
