@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'debug_toolbar',
+    'corsheaders',
     'decks',
     'categories',
 ]
@@ -48,6 +49,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -158,10 +160,37 @@ INTERNAL_IPS = [
     '0.0.0.0',
     '127.0.0.1',  # Para acceso desde localhost
     '::1',        # Para acceso desde localhost en IPv6
-    '172.17.0.1',  # IP de red por defecto de Docker (ajusta según sea necesario)
-    'host.docker.internal'  # Nombre de host para la máquina host en Docker para Windows/Mac
 ]
 
 DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": lambda request: True,
 }
+
+CORS_ALLOW_ALL_ORIGINS = True
+# todos
+
+# CORS_ALLOWED_ORIGINS = [
+#     'https://example.com',
+#     'https://sub.example.com',
+# ]
+# solo especificos
+
+CORS_ALLOWED_METHODS = [
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS',
+]
+# metodos permitidos
+
+CORS_ALLOWED_HEADERS = [
+    'content-type',
+    'authorization',
+    'x-custom-header', # permitri encabezados personalizados
+]
+# encabezados
+
+# CORS_ALLOW_CREDENTIALS = True
+# permitir cookies y mas
