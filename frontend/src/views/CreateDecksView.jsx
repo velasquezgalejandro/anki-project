@@ -7,11 +7,7 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 
-const steps = [
-  'Select campaign settings',
-  'Create an ad group',
-  'Create an ad',
-];
+const steps = ['Crear Categoria', 'Crear Subcategoria', 'Crear Decks'];
 
 const CreateDecksView = () => {
   const [data, setData] = useState();
