@@ -57,6 +57,14 @@ const Header = () => {
         </Box>
         <Stack direction="row" columnGap={2} sx={{ width: 0.5 }}>
           <StyledButton
+            label={'Crear Cards'}
+            action={renderNavigate('/create-cards')}
+            styles={{
+              bgcolor: 'buttons.secondary',
+              color: 'text.white',
+            }}
+          />
+          <StyledButton
             label={'Crear Decks'}
             action={renderNavigate('/create-decks')}
             styles={{

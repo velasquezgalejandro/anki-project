@@ -2,7 +2,12 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import OutletPage from './OutletPage';
 
-import { DownloadDecksView, CreateDecksView, HomeView } from './views';
+import {
+  DownloadDecksView,
+  CreateDecksView,
+  CreateCardsView,
+  HomeView,
+} from './views';
 
 function App() {
   return (
@@ -12,6 +17,7 @@ function App() {
           <Route path="/" element={<HomeView />} exact />
           <Route path="download-decks" element={<DownloadDecksView />} exact />
           <Route path="create-decks" element={<CreateDecksView />} exact />
+          <Route path="create-cards" element={<CreateCardsView />} exact />
         </Route>
       </Routes>
     </Router>
