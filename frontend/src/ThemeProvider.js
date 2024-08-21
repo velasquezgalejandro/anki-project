@@ -22,6 +22,17 @@ const theme = createTheme({
       selectedHover: '#050719',
     },
   },
+  components: {
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          // backgroundColor: '#B2DFDB',
+          backgroundColor: '#E0F8F7',
+          border: '1px solid #B2DFDB',
+        },
+      },
+    },
+  },
 });
 
 // #767bb2
