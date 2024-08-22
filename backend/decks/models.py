@@ -12,7 +12,7 @@ class Decks(models.Model):
     title = models.CharField(max_length=200)
     category = models.ForeignKey(Categories, on_delete=models.CASCADE, related_name='categories')
     subcategory = models.ForeignKey(Subcategories, on_delete=models.CASCADE, related_name='subCategories')
-    laguange = models.CharField(max_length=200, choices=LANGUAGE_CHOICES, default='EN')
+    language = models.CharField(max_length=200, choices=LANGUAGE_CHOICES, default='EN')
 
     def __str__(self):
         return self.title

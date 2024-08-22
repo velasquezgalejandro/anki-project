@@ -6,7 +6,7 @@ from .models import Decks, Cards
 @admin.register(Decks)
 class DecksAdmin(admin.ModelAdmin):
     list_display = ('id', 'title')
-    search_fields = ('title', 'category', 'subcategory', 'laguange')
+    search_fields = ('title', 'category', 'subcategory', 'language')
     ordering = ('id', )
 
 

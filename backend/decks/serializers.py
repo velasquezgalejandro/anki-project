@@ -5,7 +5,7 @@ from .models import Decks, Cards
 class DecksSerializer(serializers.ModelSerializer):
     class Meta:
         model = Decks
-        fields = ['id', 'title', 'category', 'subcategory']
+        fields = ['id', 'title', 'category', 'subcategory', 'language']
 
 
 class CardsSerializer(serializers.ModelSerializer):
