@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from 'react';
+import {useNavigate} from 'react-router-dom'
 import axios from 'axios';
 
 import Stack from '@mui/material/Stack';
-import { FormWrapper, GenericTextField, GenericAutocomplete } from '../utils';
+import {
+  FormWrapper,
+  GenericTextField,
+  GenericAutocomplete,
+  StyledButton,
+} from '../utils';
 
 const CreateDecksView = () => {
+  const navigate = useNavigate();
+
   const [dataCategory, setDataCategory] = useState();
   const [dataSubcategory, setDataSubcategory] = useState();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
+  const [selectedLanguage, setLanguage] = useState(null);
   const [title, setTitle] = useState('');
 
   const fetchDataCategory = async () => {
@@ -24,19 +33,13 @@ const CreateDecksView = () => {
     try {
       const response = await axios.get('http://localhost:8000/subcategories/');
       setDataSubcategory(response.data);
-    } catch (err) {
-      console.log({ err });
-    }
+    } catch (err) {}
   };
-
 
   useEffect(() => {
     fetchDataCategory();
     fetchDataSubCategory();
   }, []);
-
-  // console.log({ dataCategory });
-  // console.log({ dataSubcategory });
 
   const handleChangeAutocomplete = (setState, newValue) => {
     setState(newValue);
@@ -44,6 +47,29 @@ const CreateDecksView = () => {
 
   const handleChangeTextField = (setState, event) => {
     setState(event.target.value);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const payload = {
+        title,
+        category: selectedCategory.id,
+        subcategory: selectedSubcategory.id,
+        language: selectedLanguage.code,
+      };
+
+      await axios.post('http://localhost:8000/decks/', payload);
+      alert('Deck created successfully!');
+      // Aquí puedes limpiar el formulario o redirigir al usuario si es necesario
+      setTitle(null)
+      setSelectedCategory(null)
+      setSelectedSubcategory(null)
+      setLanguage(null)
+      navigate('/create-cards')
+    } catch (err) {
+      console.error('Error creating deck:', err);
+      alert('Failed to create deck. Please try again.');
+    }
   };
 
   return (
@@ -62,6 +88,7 @@ const CreateDecksView = () => {
           label="category"
           name="category"
           options={dataCategory}
+          getOptionLabel={(option) => option.title}
           helperText={''}
           value={selectedCategory}
           onChange={(e) => handleChangeAutocomplete(setSelectedCategory, e)}
@@ -70,22 +97,30 @@ const CreateDecksView = () => {
           label="subcategory"
           name="subcategory"
           options={dataSubcategory}
+          getOptionLabel={(option) => option.title}
           helperText={''}
           value={selectedSubcategory}
           onChange={(e) => {
             handleChangeAutocomplete(setSelectedSubcategory, e);
           }}
         />
-        <GenericTextField
+        <GenericAutocomplete
           label="language"
           name="lenguaje"
+          options={[
+            { code: 'EN', label: 'English' },
+            { code: 'ES', label: 'Spanish' },
+          ]}
+          getOptionLabel={(option) => option.label}
           helperText={''}
-          value={''}
+          value={selectedLanguage}
           onChange={(e) => {
-            handleChangeTextField(setLanguage, e);
+            handleChangeAutocomplete(setLanguage, e);
           }}
         />
       </FormWrapper>
+
+      <StyledButton label="Enviar" action={handleSubmit} />
     </Stack>
   );
 };
