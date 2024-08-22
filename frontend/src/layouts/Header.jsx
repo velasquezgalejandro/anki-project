@@ -4,6 +4,7 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
@@ -14,6 +15,7 @@ import { PrincipalButton, StyledButton } from '../utils';
 const Header = () => {
   const [auth, setAuth] = useState(true);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorElAccount, setAnchorElAccount] = useState(null);
   const navigate = useNavigate();
 
   const handleMenu = (event) => {
@@ -24,8 +26,21 @@ const Header = () => {
     setAnchorEl(null);
   };
 
-  const renderNavigate = (link) => () => {
+  const handleMenuAccount = (event) => {
+    setAnchorElAccount(event.currentTarget);
+  };
+
+  const handleCloseAccount = () => {
+    setAnchorElAccount(null);
+  };
+
+  const renderRedirect = (link) => () => {
     navigate(link);
+    handleClose();
+  };
+
+  const renderMenuItem = (link, label) => {
+    return <MenuItem onClick={renderRedirect(link)}>{label}</MenuItem>;
   };
 
   return (
@@ -56,26 +71,35 @@ const Header = () => {
           </Typography>
         </Box>
         <Stack direction="row" columnGap={2} sx={{ width: 0.5 }}>
-          <StyledButton
-            label={'Crear Cards'}
-            action={renderNavigate('/create-cards')}
-            styles={{
-              bgcolor: 'buttons.secondary',
-              color: 'text.white',
+          <IconButton
+            size="large"
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleMenu}
+            color="inherit"
+          >
+            <MenuIcon />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            keepMounted
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
             }}
-          />
-          <StyledButton
-            label={'Crear Decks'}
-            action={renderNavigate('/create-decks')}
-            styles={{
-              bgcolor: 'buttons.secondary',
-              color: 'text.white',
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
             }}
-          />
-          <PrincipalButton
-            label={'Descargar decks'}
-            action={renderNavigate('/download-decks')}
-          />
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            {renderMenuItem('/create-decks', 'Crear decks')}
+            {renderMenuItem('/create-category', 'Crear categoria')}
+            {renderMenuItem('/create-subcategory', 'Crear subcategoria')}
+            {renderMenuItem('/create-cards', 'Crear cards')}
+          </Menu>
         </Stack>
         {auth && (
           <Box>
@@ -84,14 +108,13 @@ const Header = () => {
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
-              onClick={handleMenu}
+              onClick={handleMenuAccount}
               color="inherit"
             >
               <AccountCircle />
             </IconButton>
             <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
+              anchorEl={anchorElAccount}
               keepMounted
               anchorOrigin={{
                 vertical: 'bottom',
@@ -101,11 +124,11 @@ const Header = () => {
                 vertical: 'top',
                 horizontal: 'right',
               }}
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
+              open={Boolean(anchorElAccount)}
+              onClose={handleCloseAccount}
             >
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
+              <MenuItem onClick={handleCloseAccount}>Profile</MenuItem>
+              <MenuItem onClick={handleCloseAccount}>My account</MenuItem>
             </Menu>
           </Box>
         )}

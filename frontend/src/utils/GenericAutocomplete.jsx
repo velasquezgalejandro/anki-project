@@ -4,10 +4,10 @@ import GenericTextField from './GenericTextField';
 
 const GenericAutocomplete = ({
   options = [],
+  getOptionLabel = '',
   value,
   onChange,
   label,
-  getOptionLabel = (option) => option.title || '',
   ...props
 }) => {
   return (
