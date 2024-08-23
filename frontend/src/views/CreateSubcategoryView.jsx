@@ -14,10 +14,7 @@ const CreateSubcategoryView = () => {
   const navigate = useNavigate();
 
   const [dataCategory, setDataCategory] = useState();
-  const [dataSubcategory, setDataSubcategory] = useState();
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedSubcategory, setSelectedSubcategory] = useState(null);
-  const [selectedLanguage, setLanguage] = useState(null);
   const [title, setTitle] = useState('');
 
   const fetchDataCategory = async () => {
@@ -29,16 +26,8 @@ const CreateSubcategoryView = () => {
     }
   };
 
-  const fetchDataSubCategory = async () => {
-    try {
-      const response = await axios.get('http://localhost:8000/subcategories/');
-      setDataSubcategory(response.data);
-    } catch (err) {}
-  };
-
   useEffect(() => {
     fetchDataCategory();
-    fetchDataSubCategory();
   }, []);
 
   const handleChangeAutocomplete = (setState, newValue) => {
@@ -54,21 +43,17 @@ const CreateSubcategoryView = () => {
       const payload = {
         title,
         category: selectedCategory.id,
-        subcategory: selectedSubcategory.id,
-        language: selectedLanguage.code,
       };
 
-      await axios.post('http://localhost:8000/decks/', payload);
-      alert('Deck created successfully!');
+      await axios.post('http://localhost:8000/subcategories/', payload);
+      alert('Subcategory created successfully!');
       // Aquí puedes limpiar el formulario o redirigir al usuario si es necesario
       setTitle(null);
       setSelectedCategory(null);
-      setSelectedSubcategory(null);
-      setLanguage(null);
-      navigate('/create-cards');
+      navigate('/create-decks');
     } catch (err) {
-      console.error('Error creating deck:', err);
-      alert('Failed to create deck. Please try again.');
+      console.error('Error creating subcategory:', err);
+      alert('Failed to create subcategory. Please try again.');
     }
   };
 
@@ -83,6 +68,15 @@ const CreateSubcategoryView = () => {
           onChange={(e) => {
             handleChangeTextField(setTitle, e);
           }}
+        />
+        <GenericAutocomplete
+          label="category"
+          name="category"
+          options={dataCategory}
+          getOptionLabel={(option) => option.title}
+          helperText={''}
+          value={selectedCategory}
+          onChange={(e) => handleChangeAutocomplete(setSelectedCategory, e)}
         />
       </FormWrapper>
 

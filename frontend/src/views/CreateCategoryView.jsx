@@ -13,33 +13,8 @@ import {
 const CreateCategoryView = () => {
   const navigate = useNavigate();
 
-  const [dataCategory, setDataCategory] = useState();
-  const [dataSubcategory, setDataSubcategory] = useState();
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   const [selectedLanguage, setLanguage] = useState(null);
   const [title, setTitle] = useState('');
-
-  const fetchDataCategory = async () => {
-    try {
-      const response = await axios.get('http://localhost:8000/categories/');
-      setDataCategory(response.data);
-    } catch (err) {
-      console.log({ err });
-    }
-  };
-
-  const fetchDataSubCategory = async () => {
-    try {
-      const response = await axios.get('http://localhost:8000/subcategories/');
-      setDataSubcategory(response.data);
-    } catch (err) {}
-  };
-
-  useEffect(() => {
-    fetchDataCategory();
-    fetchDataSubCategory();
-  }, []);
 
   const handleChangeAutocomplete = (setState, newValue) => {
     setState(newValue);
@@ -53,22 +28,18 @@ const CreateCategoryView = () => {
     try {
       const payload = {
         title,
-        category: selectedCategory.id,
-        subcategory: selectedSubcategory.id,
-        language: selectedLanguage.code,
+        // language: selectedLanguage.code,
       };
 
-      await axios.post('http://localhost:8000/decks/', payload);
-      alert('Deck created successfully!');
+      await axios.post('http://localhost:8000/categories/', payload);
+      alert('category created successfully!');
       // Aquí puedes limpiar el formulario o redirigir al usuario si es necesario
       setTitle(null);
-      setSelectedCategory(null);
-      setSelectedSubcategory(null);
       setLanguage(null);
-      navigate('/create-cards');
+      navigate('/create-subcategory');
     } catch (err) {
-      console.error('Error creating deck:', err);
-      alert('Failed to create deck. Please try again.');
+      console.error('Error creating category:', err);
+      alert('Failed to create category. Please try again.');
     }
   };
 
@@ -82,6 +53,20 @@ const CreateCategoryView = () => {
           value={title}
           onChange={(e) => {
             handleChangeTextField(setTitle, e);
+          }}
+        />
+        <GenericAutocomplete
+          label="language"
+          name="lenguaje"
+          options={[
+            { code: 'EN', label: 'English' },
+            { code: 'ES', label: 'Spanish' },
+          ]}
+          getOptionLabel={(option) => option.label}
+          helperText={''}
+          value={selectedLanguage}
+          onChange={(e) => {
+            handleChangeAutocomplete(setLanguage, e);
           }}
         />
       </FormWrapper>
