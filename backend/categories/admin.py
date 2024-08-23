@@ -6,7 +6,7 @@ from .models import Categories, Subcategories
 @admin.register(Categories)
 class CategoriesAdmin(admin.ModelAdmin):
     list_display = ('id', 'title')
-    search_fields = ('title', 'laguange')
+    search_fields = ('title', 'language')
     ordering = ('id', )
 
 

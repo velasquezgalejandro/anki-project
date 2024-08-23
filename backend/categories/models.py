@@ -1,12 +1,18 @@
 from django.db import models
 
+LANGUAGE_CHOICES = [
+    ('EN', 'English'),
+    ('ES', 'Spanish'),
+]
+
 
 # Create your models here.
 class Categories(models.Model):
     title = models.CharField(max_length=200)
-    laguange = models.CharField(max_length=200)
+    language = models.CharField(max_length=200, choices=LANGUAGE_CHOICES, default='EN')
 
     def __str__(self):
+        print('el modelo funciona')
         return self.title
 
 

@@ -4,11 +4,11 @@ from .models import Categories, Subcategories
 
 class CategoriesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Categories()
-        fields = ['id', 'title', 'laguange']
+        model = Categories
+        fields = ['id', 'title', 'language']
 
 
 class SubcategoriesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Subcategories()
+        model = Subcategories
         fields = ['id', 'title', 'category']
