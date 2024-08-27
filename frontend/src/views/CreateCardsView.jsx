@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box'
 import {
   FormWrapper,
   GenericTextField,
@@ -19,6 +20,8 @@ const CreateCardsView = () => {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [command, setCommand] = useState('');
+  const [pdfSelected, setPdfSelected] = useState(null);
+
 
   const fetchDataDecks = async () => {
     try {
@@ -39,6 +42,13 @@ const CreateCardsView = () => {
 
   const handleChangeTextField = (setState, event) => {
     setState(event.target.value);
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setPdfSelected(URL.createObjectURL(file));
+    }
   };
 
   const handleSubmit = async () => {
@@ -116,6 +126,64 @@ const CreateCardsView = () => {
       </FormWrapper>
 
       <StyledButton label="Enviar" action={handleSubmit} />
+    <Box sx={{
+      position: 'relative',
+      border: '4px solid #d0d7de',
+      height: 100,
+      marginLeft: '10px',
+      marginRight: '10px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      '&:hover': {
+        backgroundColor: 'transparent',
+        border: '4px dashed #d0d7de'
+      }
+    }}>
+      <input
+        type="file"
+        accept="application/pdf"
+        multiple
+        onChange={handleFileChange}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          opacity: 0,
+          cursor: 'pointer'
+        }}
+      />
+      <div className="text-information"
+        sx={{
+          position: 'relative',
+          zIndex: 1,
+          textAlign: 'center'
+        }}
+      >
+        <h3>Drag and drop a file or select an Image</h3>
+      </div>
+      {pdfSelected && (
+        <Box sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 2
+        }}>
+          <iframe
+            src={pdfSelected}
+            style={{ width: '100%', height: '100%' }}
+            frameBorder="0"
+          />
+        </Box>
+      )}
+    </Box>
     </Stack>
   );
 };
