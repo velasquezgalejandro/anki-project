@@ -12,8 +12,6 @@ import {
 } from '../utils';
 
 const CreateCardsView = () => {
-  const navigate = useNavigate();
-
   const [dataDecks, setDataDecks] = useState();
   const [selectedDeck, setSelectedDeck] = useState(null);
   const [title, setTitle] = useState('');
@@ -76,8 +74,8 @@ const CreateCardsView = () => {
   };
 
   return (
-    <Stack sx={{ p: 2 }}>
-      <FormWrapper title="title">
+    <Stack rowGap={2} sx={{ p: 2 }} >
+      <FormWrapper title="Crea tus cards o monta un archivo (pdf)">
         <GenericAutocomplete
           label="decks"
           name="decks"
@@ -123,13 +121,16 @@ const CreateCardsView = () => {
             handleChangeTextField(setCommand, e);
           }}
         />
+      <StyledButton label="Enviar" action={handleSubmit} styles={{
+        bgcolor:'primary.main',
+        color:'white'
+      }} />
       </FormWrapper>
 
-      <StyledButton label="Enviar" action={handleSubmit} />
     <Box sx={{
       position: 'relative',
       border: '4px solid #d0d7de',
-      height: 100,
+      minHeight: 800,
       marginLeft: '10px',
       marginRight: '10px',
       display: 'flex',
@@ -179,11 +180,16 @@ const CreateCardsView = () => {
           <iframe
             src={pdfSelected}
             style={{ width: '100%', height: '100%' }}
-            frameBorder="0"
           />
         </Box>
       )}
     </Box>
+      {pdfSelected &&
+        <StyledButton label="Enviar" action={handleSubmit} styles={{
+          bgcolor: 'primary.main',
+          color: 'white'
+        }} />
+      }
     </Stack>
   );
 };

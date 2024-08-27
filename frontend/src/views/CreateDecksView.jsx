@@ -3,6 +3,7 @@ import {useNavigate} from 'react-router-dom'
 import axios from 'axios';
 
 import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box'
 import {
   FormWrapper,
   GenericTextField,
@@ -19,6 +20,7 @@ const CreateDecksView = () => {
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   const [selectedLanguage, setLanguage] = useState(null);
   const [title, setTitle] = useState('');
+  const [pdfSelected, setPdfSelected] = useState(null);
 
   const fetchDataCategory = async () => {
     try {
@@ -72,9 +74,16 @@ const CreateDecksView = () => {
     }
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setPdfSelected(URL.createObjectURL(file));
+    }
+  };
+
   return (
-    <Stack sx={{ p: 2 }}>
-      <FormWrapper title="title">
+    <Stack sx={{ p: 2 }} rowGap={2}>
+      <FormWrapper title="Crea tu Deck o monta un archivo (csv) para crear tu deck">
         <GenericTextField
           label="Title"
           name="title"
@@ -118,9 +127,11 @@ const CreateDecksView = () => {
             handleChangeAutocomplete(setLanguage, e);
           }}
         />
+              <StyledButton label="Enviar" action={handleSubmit} styles={{
+        bgcolor:'primary.main',
+        color:'white'
+      }} />
       </FormWrapper>
-
-      <StyledButton label="Enviar" action={handleSubmit} />
     </Stack>
   );
 };
