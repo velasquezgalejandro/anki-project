@@ -51,7 +51,7 @@ const CreateCardsView = () => {
 
   const handleSubmit = async () => {
     try {
-      const payload = {
+      const payload =  {
         deck: selectedDeck.id,
         title,
         question,
@@ -59,7 +59,7 @@ const CreateCardsView = () => {
         command,
       };
 
-      await axios.post('http://localhost:8000/cards/', payload);
+      await axios.post(`http://localhost:8000/cards/`, payload);
       alert('Card created successfully!');
       // Aquí puedes limpiar el formulario o redirigir al usuario si es necesario
       setTitle(null);
@@ -71,6 +71,30 @@ const CreateCardsView = () => {
       console.error('Error creating deck:', err);
       alert('Failed to create deck. Please try again.');
     }
+  };
+
+ const handleSubmitPDf = async (e) => {
+        e.preventDefault();
+
+        if (!pdfSelected) {
+            setMessage('Please select a file first.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', pdfSelected);
+
+        try {
+            const response = await axios.post('http://localhost:8000/upload/', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            setMessage(response.data.message);
+        } catch (error) {
+            setMessage('Error uploading file');
+            console.error('Upload error:', error.response ? error.response.data : error.message);
+        }
   };
 
   return (
@@ -185,7 +209,7 @@ const CreateCardsView = () => {
       )}
     </Box>
       {pdfSelected &&
-        <StyledButton label="Enviar" action={handleSubmit} styles={{
+        <StyledButton label="Enviar" action={handleSubmitPDf} styles={{
           bgcolor: 'primary.main',
           color: 'white'
         }} />

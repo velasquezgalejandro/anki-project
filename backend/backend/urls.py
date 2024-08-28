@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
-from decks.views import DecksListCreateView, CardsListCreateView
+from decks.views import DecksListCreateView, CardsListCreateView, UploadFileView
 from categories.views import CategoriesListCreateView, SubcategoriesListCreateView
 
 urlpatterns = [
@@ -25,7 +25,8 @@ urlpatterns = [
     path('decks/', DecksListCreateView.as_view(), name='deck-list-create'),
     path('cards/', CardsListCreateView.as_view(), name='card-list-create'),
     path('categories/', CategoriesListCreateView.as_view(), name='categories-list-create'),
-    path('subcategories/', SubcategoriesListCreateView.as_view(), name='subcategories-list-create')
+    path('subcategories/', SubcategoriesListCreateView.as_view(), name='subcategories-list-create'),
+    path('upload/', UploadFileView.as_view(), name='upload_file'),
 ]
 
 if settings.DEBUG:
@@ -33,3 +34,4 @@ if settings.DEBUG:
     urlpatterns = [
         path('__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
+

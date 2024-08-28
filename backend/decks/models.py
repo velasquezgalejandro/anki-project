@@ -1,5 +1,6 @@
 from django.db import models
 from categories.models import Categories, Subcategories
+import pdfplumber
 
 LANGUAGE_CHOICES = [
     ('EN', 'English'),
@@ -27,3 +28,4 @@ class Cards(models.Model):
 
     def __str__(self):
         return self.title
+
