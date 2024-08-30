@@ -45,7 +45,15 @@ const CreateCardsView = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setPdfSelected(URL.createObjectURL(file));
+      if (file.type === 'application/epub+zip') {
+       console.log({file})
+        setPdfSelected(file);
+      } else {
+        alert('Please select a valid EPUB file.');
+      }
+    // const epubUrl = URL.createObjectURL(file);
+    // console.log({epubUrl})
+    // setPdfSelected(epubUrl);
     }
   };
 
@@ -77,7 +85,7 @@ const CreateCardsView = () => {
         e.preventDefault();
 
         if (!pdfSelected) {
-            setMessage('Please select a file first.');
+            alert('Please select a file first.');
             return;
         }
 
@@ -90,16 +98,16 @@ const CreateCardsView = () => {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            setMessage(response.data.message);
+            alert('create cards.');
         } catch (error) {
-            setMessage('Error uploading file');
             console.error('Upload error:', error.response ? error.response.data : error.message);
+            alert('Failed to create deck. Please try again.');
         }
   };
 
   return (
     <Stack rowGap={2} sx={{ p: 2 }} >
-      <FormWrapper title="Crea tus cards o monta un archivo (pdf)">
+      <FormWrapper title="Crea tus cards o monta un archivo (epub)">
         <GenericAutocomplete
           label="decks"
           name="decks"
@@ -154,7 +162,7 @@ const CreateCardsView = () => {
     <Box sx={{
       position: 'relative',
       border: '4px solid #d0d7de',
-      minHeight: 800,
+      minHeight: 100,
       marginLeft: '10px',
       marginRight: '10px',
       display: 'flex',
@@ -167,8 +175,7 @@ const CreateCardsView = () => {
     }}>
       <input
         type="file"
-        accept="application/pdf"
-        multiple
+        accept="application/epub+zip"
         onChange={handleFileChange}
         style={{
           position: 'absolute',
@@ -187,27 +194,15 @@ const CreateCardsView = () => {
           textAlign: 'center'
         }}
       >
-        <h3>Drag and drop a file or select an Image</h3>
+        <h3>Drag and drop a file (EPUB)   </h3>
       </div>
-      {pdfSelected && (
-        <Box sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          zIndex: 2
-        }}>
-          <iframe
-            src={pdfSelected}
-            style={{ width: '100%', height: '100%' }}
-          />
-        </Box>
-      )}
     </Box>
+      {pdfSelected && (
+      <div>
+        <p>EPUB File Selected:</p>
+        <a href={pdfSelected} download="selected.epub">Download EPUB</a>
+      </div>
+    )}
       {pdfSelected &&
         <StyledButton label="Enviar" action={handleSubmitPDf} styles={{
           bgcolor: 'primary.main',

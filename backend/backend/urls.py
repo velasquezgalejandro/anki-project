@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
-from decks.views import DecksListCreateView, CardsListCreateView, UploadFileView
+from decks.views import DecksListCreateView, CardsListCreateView, EpubUploadView
 from categories.views import CategoriesListCreateView, SubcategoriesListCreateView
 
 urlpatterns = [
@@ -26,7 +26,7 @@ urlpatterns = [
     path('cards/', CardsListCreateView.as_view(), name='card-list-create'),
     path('categories/', CategoriesListCreateView.as_view(), name='categories-list-create'),
     path('subcategories/', SubcategoriesListCreateView.as_view(), name='subcategories-list-create'),
-    path('upload/', UploadFileView.as_view(), name='upload_file'),
+    path('upload/', EpubUploadView.as_view(), name='upload-epub'),
 ]
 
 if settings.DEBUG:

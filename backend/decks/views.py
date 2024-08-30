@@ -1,10 +1,11 @@
-import pdfplumber
-
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Decks, Cards
 from .serializers import DecksSerializer, CardsSerializer
+
+# from EbookLib import epub
+from django.core.files.uploadedfile import UploadedFile
 
 # Create your views here.
 class DecksListCreateView(generics.ListCreateAPIView):
@@ -16,27 +17,60 @@ class CardsListCreateView(generics.ListCreateAPIView):
     queryset = Cards.objects.all()
     serializer_class = CardsSerializer
 
-class UploadFileView(APIView):
+class EpubUploadView(APIView):
     def post(self, request, *args, **kwargs):
-        file = request.FILES.get('file')
-        if not file:
-            return Response({'error': 'No file provided'}, status=status.HTTP_400_BAD_REQUEST)
+        epub_file = request.FILES.get('file')
+        print('----------------')
+        print(epub_file)
+        print('----------------')
+        if epub_file and epub_file.content_type == 'application/epub+zip':
+            # try:
+            #     # Leer el archivo EPUB
+            #     file_content = epub_file.read()
 
-        try:
-            self.handle_uploaded_file(file)
-            return Response({'message': 'File uploaded and processed successfully!'}, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            #     # Procesar el archivo EPUB
+            #     book = epub.read_epub(io.BytesIO(file_content))
 
-    def handle_uploaded_file(self, file):
-        with pdfplumber.open(file) as pdf:
-            for page in pdf.pages:
-                text = page.extract_text()
-                lines = text.split('\n')
-                for line in lines:
-                    # Ajusta el procesamiento según la estructura del PDF
-                    parts = line.split(',')
-                    if len(parts) == 3:  # Cambia según el formato de datos esperado
-                        deck_name, card_name, card_value = parts
-                        deck, created = Decks.objects.get_or_create(name=deck_name)
-                        Cards.objects.create(deck=deck, name=card_name, value=card_value)
+            #     # Extraer información básica
+            #     title = book.get('title', 'Desconocido')
+            #     author = book.get('author', 'Desconocido')
+
+            #     # Puedes extraer más información si lo necesitas
+            #     documents = []
+            #     for item in book.items:
+            #         if item.get_type() == epub.EpubHtml:
+            #             documents.append(item.get_content().decode('utf-8'))
+
+            #     # Preparar la respuesta
+            #     response_data = {
+            #         'title': title,
+            #         'author': author,
+            #         'documents': documents[:5]  # Limitar el número de documentos mostrados
+            #     }
+            response_data = {}
+
+            return Response(response_data, status=status.HTTP_200_OK)
+            # except Exception as e:
+            #     # Imprime el rastreo del error en los logs
+            #     print("Exception: ", e)
+            #     return Response({'error': 'Failed to process EPUB file'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'Invalid file format'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# from EbookLib import epub
+
+# def extract_epub_data(file):
+#     book = epub.read_epub(file)
+
+#     # Extraer título y autor
+#     title = book.get_metadata('DC', 'title')
+#     author = book.get_metadata('DC', 'creator')
+
+#     # Extraer otros metadatos
+#     # Aquí puedes usar otros métodos disponibles en `book`
+
+#     return {
+#         'title': title[0] if title else 'Desconocido',
+#         'author': author[0] if author else 'Desconocido',
+#         # Agrega más datos según sea necesario
+#     }
