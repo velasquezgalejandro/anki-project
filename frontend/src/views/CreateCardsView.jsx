@@ -51,9 +51,6 @@ const CreateCardsView = () => {
       } else {
         alert('Please select a valid EPUB file.');
       }
-    // const epubUrl = URL.createObjectURL(file);
-    // console.log({epubUrl})
-    // setPdfSelected(epubUrl);
     }
   };
 
@@ -81,7 +78,7 @@ const CreateCardsView = () => {
     }
   };
 
- const handleSubmitPDf = async (e) => {
+ const handleSubmitEpub = async (e) => {
         e.preventDefault();
 
         if (!pdfSelected) {
@@ -90,14 +87,13 @@ const CreateCardsView = () => {
         }
 
         const formData = new FormData();
-        formData.append('file', pdfSelected);
+        formData.append('epub', pdfSelected);
 
         try {
             const response = await axios.post('http://localhost:8000/upload/', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
+        method: 'POST',
+        body: formData,
+      });
             alert('create cards.');
         } catch (error) {
             console.error('Upload error:', error.response ? error.response.data : error.message);
@@ -204,7 +200,7 @@ const CreateCardsView = () => {
       </div>
     )}
       {pdfSelected &&
-        <StyledButton label="Enviar" action={handleSubmitPDf} styles={{
+        <StyledButton label="Enviar" action={handleSubmitEpub} styles={{
           bgcolor: 'primary.main',
           color: 'white'
         }} />

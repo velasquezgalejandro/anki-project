@@ -4,9 +4,19 @@ from rest_framework.response import Response
 from .models import Decks, Cards
 from .serializers import DecksSerializer, CardsSerializer
 from django.core.files.uploadedfile import UploadedFile
+from django.http import JsonResponse
 
 import io
 from pyepub import EPUB
+from ebooklib import epub
+from EbookLib.epub import EpubHtml
+import tempfile
+
+import logging
+import warnings
+
+# Configura el logger
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 class DecksListCreateView(generics.ListCreateAPIView):
@@ -20,72 +30,64 @@ class CardsListCreateView(generics.ListCreateAPIView):
 
 class EpubUploadView(APIView):
     def post(self, request, *args, **kwargs):
-        epub_file = request.FILES.get('file')
+        if request.method == "POST" and request.FILES.get('epub'):
+            epub_file = request.FILES['epub']
 
-        if epub_file and epub_file.content_type == 'application/epub+zip':
-            try:
-                # # Leer el archivo EPUB
-                file_content = epub_file.read()
-                epub = EPUB(io.BytesIO(file_content))
-                documents = []
+            # Crear un archivo temporal
+            with tempfile.NamedTemporaryFile(delete=True) as tmp:
+                tmp.write(epub_file.read())
+                tmp.flush()  # Asegurarse de que los datos están escritos en disco
 
-                for item in epub.contents:
-                    src = item.get('src')
-                    if src:
-                        try:
-                            # Leer el contenido del archivo usando 'src'
-                            with epub.file_obj.open(src) as file:
-                                file_content = file.read()
-                                print('-----------------------')
-                                print(file_content)
-                                print('-----------------------')
+                # Leer el archivo epub desde el archivo temporal
+                book = epub.read_epub(tmp.name)
 
-                                # Si el archivo es HTML, decodificar su contenido
-                                if src.endswith('.html'):
-                                    documents.append(file_content.decode('utf-8'))
-                        except Exception as e:
-                            print(f'Error reading file {src}: {e}')
+            # Extraer el contenido del archivo epub
+            content = []
+            for item in book.get_items():
+                if isinstance(item, EpubHtml):  # Verifica si el ítem es de tipo EpubHtml
+                    content.append(item.get_content().decode('utf-8'))
 
-                # Extraer información básica (si tienes metadatos como título y autor)
-                title = epub_book.get('title', 'Unknown Title')
-                author = epub_book.get('author', 'Unknown Author')
+            return JsonResponse({
+                'content': content
+            })
+        else:
+            return JsonResponse({
+                'error': 'No se proporcionó un archivo EPUB válido.'
+            }, status=400)
 
-                # Preparar la respuesta
-                # response_data = {
-                #     'title': title,
-                #     'author': author,
-                #     'documents': documents[:5]  # Limitar el número de documentos mostrados
-                # }
 
-                # return Response(response_data, status=status.HTTP_200_OK)
+    # def post(self, request, *args, **kwargs):
+    #     epub_file = request.FILES.get('file')
 
-                # for item in epub.contents:
-                #     print(item)
-                #     if hasattr(item, 'get_type') and item.get_type() == 'text':
-                #         print('------------adrento-------------')
-                #         print(item)
-                #         if hasattr(item, 'get_content'):
-                #             print('------------adrento-------------')
-                #             print(item.getContent())
-                            # documents.append(item.get_content().decode('utf-8'))
+    #     if not epub_file or not epub_file.name.endswith('.epub'):
+    #         return Response({'error': 'Invalid file format'}, status=status.HTTP_400_BAD_REQUEST)
 
-#                 # Extraer información básica
-#                 documents = []
-#                 print('----------extraer informacion---------------------------')
-#                 print(documents)
-#                 print('----------extraer informacion---------------------------')
-# #                 # Preparar la respuesta
-# #                 response_data = {
-# #                     'title': title,
-# #                     'author': author,
-# #                     'documents': documents[:5]  # Limitar el número de documentos mostrados
-# #                 }
-# #                 return Response(response_data, status=status.HTTP_200_OK)
-                response_data = {}
+    #     try:
+    #         # Leer el archivo EPUB desde el request.FILES
+    #         epub_content = epub_file.read()
+    #         epub_file_io = io.BytesIO(epub_content)
+    #         print('---------------------------file-io---------------------------')
+    #         print(epub_file_io)
+    #         print(epub_file)
 
-                return Response(response_data, status=status.HTTP_200_OK)
-            except Exception as e:
-                # Imprime el rastreo del error en los logs
-                print("Exception: ", e)
-                return Response({'error': 'Failed to process EPUB file'}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({'error': 'Invalid file format'}, status=status.HTTP_400_BAD_REQUEST)
+    #         warnings.filterwarnings("ignore", category=UserWarning, module="ebooklib")
+    #         libro = epub.read_epub(epub_file)
+    #         print('---------------------libro-----------------')
+    #         print(libro)
+
+
+    #         # for item in libro.items():
+    #         #     if item.get_type() == epub.ITEM_DOCUMENT:
+    #         #         # Decodificar el contenido del ítem
+    #         #         contenido = item.get_content().decode('utf-8')
+    #         #         contenido_total.append(contenido)
+
+    #         # Aquí podrías procesar el contenido según tus necesidades
+    #         return Response({}, status=status.HTTP_200_OK)
+
+    #     except Exception as e:
+    #         # Manejo de errores
+    #         logger.error(f"Error processing EPUB file: {e}", exc_info=True)
+    #         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
