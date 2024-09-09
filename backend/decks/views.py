@@ -8,8 +8,8 @@ from django.http import JsonResponse
 
 import io
 from pyepub import EPUB
-from ebooklib import epub
-from EbookLib.epub import EpubHtml
+# from ebooklib import epub
+# from EbookLib.epub import EpubHtml
 import tempfile
 
 import logging
@@ -33,27 +33,27 @@ class EpubUploadView(APIView):
         if request.method == "POST" and request.FILES.get('epub'):
             epub_file = request.FILES['epub']
 
-            # Crear un archivo temporal
-            with tempfile.NamedTemporaryFile(delete=True) as tmp:
-                tmp.write(epub_file.read())
-                tmp.flush()  # Asegurarse de que los datos están escritos en disco
+#             # Crear un archivo temporal
+#             with tempfile.NamedTemporaryFile(delete=True) as tmp:
+#                 tmp.write(epub_file.read())
+#                 tmp.flush()  # Asegurarse de que los datos están escritos en disco
 
-                # Leer el archivo epub desde el archivo temporal
-                book = epub.read_epub(tmp.name)
+#                 # Leer el archivo epub desde el archivo temporal
+#                 book = epub.read_epub(tmp.name)
 
-            # Extraer el contenido del archivo epub
-            content = []
-            for item in book.get_items():
-                if isinstance(item, EpubHtml):  # Verifica si el ítem es de tipo EpubHtml
-                    content.append(item.get_content().decode('utf-8'))
+#             # Extraer el contenido del archivo epub
+#             content = []
+#             for item in book.get_items():
+#                 if isinstance(item, EpubHtml):  # Verifica si el ítem es de tipo EpubHtml
+#                     content.append(item.get_content().decode('utf-8'))
 
-            return JsonResponse({
-                'content': content
-            })
-        else:
-            return JsonResponse({
-                'error': 'No se proporcionó un archivo EPUB válido.'
-            }, status=400)
+#             return JsonResponse({
+#                 'content': content
+#             })
+#         else:
+#             return JsonResponse({
+#                 'error': 'No se proporcionó un archivo EPUB válido.'
+#             }, status=400)
 
 
     # def post(self, request, *args, **kwargs):
