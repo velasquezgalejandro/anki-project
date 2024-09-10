@@ -164,12 +164,12 @@ INTERNAL_IPS = [
 ]
 
 DEBUG_TOOLBAR_CONFIG = {
-    "SHOW_TOOLBAR_CALLBACK": lambda request: True,
+    'SHOW_TOOLBAR_CALLBACK':  lambda request: DEBUG,
+    'IS_RUNNING_TESTS': False
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
 # todos
-
 # CORS_ALLOWED_ORIGINS = [
 #     'https://example.com',
 #     'https://sub.example.com',
