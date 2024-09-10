@@ -1,0 +1,5 @@
+Test Name,ID,Error
+test_persona_creation,1,"Nombre no coincide: 'ramiro' != 'Juan'
+- ramiro
++ Juan
+"
