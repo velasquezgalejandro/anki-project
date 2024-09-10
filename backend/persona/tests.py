@@ -6,12 +6,12 @@ class PersonaModelTest(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        # Crear archivo CSV y encabezado solo una vez al principio
+        # Crear archivo CSV
         with open('test_failures.csv', mode='w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(['Test Name', 'ID', 'Error'])
     def setUp(self):
-        # Crear una persona para usar en las pruebas
+        # Crear una persona
         self.persona = Persona.objects.create(nombre="ramiro", edad=30)
         self.failures = []
 
@@ -29,12 +29,11 @@ class PersonaModelTest(TestCase):
 
         self.append_failures_to_csv('test_persona_creation')
 
-        # Si hay fallos, lanzamos un error personalizado
+         #lanzamos un error personalizado
         if self.failures:
             self.fail("\n".join([f"ID {f['id']}: {f['error']}" for f in self.failures]))
 
     def test_str_representation(self):
-        # Verificar que el método __str__ devuelve el nombre correctamente
         try:
             self.assertEqual(str(self.persona), "Juan")
         except AssertionError as e:
@@ -42,7 +41,7 @@ class PersonaModelTest(TestCase):
 
         self.append_failures_to_csv('test_str_representation')
 
-        # Si hay fallos, lanzamos un error
+        # lanzamos un error
         if self.failures:
             self.fail("\n".join([f"ID {f['id']}: {f['error']}" for f in self.failures]))
 
@@ -51,7 +50,7 @@ class PersonaModelTest(TestCase):
         if not self.failures:
             return
 
-        # Añadir los fallos al archivo CSV
+        # Añadir los fallos
         with open('test_failures.csv', mode='a', newline='') as file:
             writer = csv.writer(file)
             # Añadir cada fallo al archivo
