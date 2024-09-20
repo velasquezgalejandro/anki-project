@@ -8,6 +8,7 @@ import {
   CreateCardsView,
   CreateCategoryView,
   CreateSubcategoryView,
+  ViewDecksView,
   HomeView,
 } from './views';
 
@@ -28,6 +29,11 @@ function App() {
           <Route
             path="create-subcategory"
             element={<CreateSubcategoryView />}
+            exact
+          />
+          <Route
+            path="view-decks"
+            element={<ViewDecksView />}
             exact
           />
         </Route>
