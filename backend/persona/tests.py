@@ -10,13 +10,13 @@ class PersonaModelTest(TestCase):
         with open('test_failures.csv', mode='w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(['Test Name', 'ID', 'Error'])
+
     def setUp(self):
         # Crear una persona
         self.persona = Persona.objects.create(nombre="ramiro", edad=30)
         self.failures = []
 
     def test_persona_creation(self):
-        # Verificar si la persona fue creada correctamente
         try:
             self.assertEqual(self.persona.nombre, "Juan")
         except AssertionError as e:
@@ -29,7 +29,6 @@ class PersonaModelTest(TestCase):
 
         self.append_failures_to_csv('test_persona_creation')
 
-         #lanzamos un error personalizado
         if self.failures:
             self.fail("\n".join([f"ID {f['id']}: {f['error']}" for f in self.failures]))
 
@@ -41,19 +40,15 @@ class PersonaModelTest(TestCase):
 
         self.append_failures_to_csv('test_str_representation')
 
-        # lanzamos un error
         if self.failures:
             self.fail("\n".join([f"ID {f['id']}: {f['error']}" for f in self.failures]))
 
     def append_failures_to_csv(self, test_name):
-        # Solo escribir si hay errores
         if not self.failures:
             return
 
-        # Añadir los fallos
         with open('test_failures.csv', mode='a', newline='') as file:
             writer = csv.writer(file)
-            # Añadir cada fallo al archivo
             for failure in self.failures:
                 writer.writerow([test_name, failure['id'], failure['error']])
 
