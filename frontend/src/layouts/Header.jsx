@@ -99,6 +99,7 @@ const Header = () => {
             {renderMenuItem('/create-category', 'Crear categoria')}
             {renderMenuItem('/create-subcategory', 'Crear subcategoria')}
             {renderMenuItem('/create-cards', 'Crear cards')}
+            {renderMenuItem('/view-decks', 'View decks')}
           </Menu>
         </Stack>
         {auth && (
