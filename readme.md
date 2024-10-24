@@ -35,3 +35,6 @@ Este script se encarga de ejecutar migraciones y crear superusuario. Est√° dise√
 ## IMPORTANTE:
 
 Primero se debe correr `scriptbuild.zsh` y luego `scriptmigrations.zsh`
+
+actualizacion de txt 
+
